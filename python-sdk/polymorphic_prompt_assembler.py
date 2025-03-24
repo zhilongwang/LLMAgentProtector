@@ -2,36 +2,49 @@ import random
 import config
 
 class PolymorphicPromptAssembler:
-    def __init__(self, system_prompt:str=None):
-        """ Initialize the protection.
+    """
+    Polymorphic Prompt Assembling (PPA) introduces randomization into the prompt structure
+    to protect LLM agents from prompt injection attacks.
+
+    By randomly selecting unique separator pairs and embedding the user input between them,
+    PPA creates unpredictable boundaries that adversarial instructions struggle to bypass.
+
+    The assembled prompt is split into:
+    1. A system prompt that clearly defines the boundary using the selected separators and
+       instructs the model to ignore any embedded instructions.
+    2. A user prompt where the actual user input is encapsulated between those separators.
+
+    This technique mitigates prompt injection by making system-to-user transitions opaque to attackers.
+
+    Example:
+        >>> from polymorphic_prompt_assembler import PolymorphicPromptAssembler
+        >>> protector = PolymorphicPromptAssembler()
+        >>> user_input = "Half Moon Bay is a scenic coastal town in Northern California."
+        >>> system_prompt, user_prompt = protector.PromptAssemble(user_input=user_input)
+        >>> print(system_prompt)
+        >>> print(user_prompt)
+    """
+
+    def __init__(self):
+        self.SEPARATORS = config.SEPARATORS
+        self.SYSTEM_PROMPT_TEMPLATE = config.SYSTEM_PROMPT
+        self.USER_INPUT = config.ATTACK_PAYLOAD
+
+    def PromptAssemble(self, user_input: str = None):
+        """
+        Assemble a protected prompt by inserting the user input between randomly chosen separators.
+
         Args:
-            system_prompt(str):required
+            user_input (str): The user's raw input text.
 
-        Example 1 (with system prompt):
-                >>> system_prompt = "Please summary the user input. \n{user_input}\n"
-                >>> protector = PolymorphicPromptAssembler(system_prompt = system_prompt)
-                >>> user_input = "Half Moon Bay is a picturesque coastal town in Northern California, located about 30 miles south of San Francisco. Known for its stunning ocean views, sandy beaches, and rugged cliffs, it offers a perfect retreat for nature lovers and outdoor enthusiasts. Visitors can explore scenic trails, surf at famous Mavericks, or relax along the coastline. The town’s historic Main Street features charming shops, art galleries, and cozy cafés. With its rich agricultural heritage, fresh seafood, and the popular Pumpkin Festival, Half Moon Bay blends small-town charm with breathtaking natural beauty, making it an ideal destination for a peaceful coastal escape."
-                >>> secured_prompt = protector.PromptAssemble(user_input = user_input)
-
+        Returns:
+            tuple: (system_prompt, user_prompt)
+                - system_prompt (str): Describes the input boundaries and instructs the LLM.
+                - user_prompt (str): User input wrapped inside the random separators.
         """
-        self.SEPARATORS     =  config.SEPARATORS
-        self.FORMAT_CONSTRAIN = config.FORMAT_CONSTRAIN            
-        self.system_prompt =  system_prompt 
-
-    def PromptAssemble(self, user_input:str=None):
-        """ Enhance the prompt that send to LLM
-            Args:
-
-                user_input(str):required
-
-            Returns:
-                secured_prompt(str): This is a secure prompt.
-
-            
-        """
+        input_text = user_input if user_input is not None else self.USER_INPUT
         left_sep, right_sep = random.choice(self.SEPARATORS)
-        
-        format_constrain = self.FORMAT_CONSTRAIN.format(left_sep=left_sep, right_sep=right_sep)
-        format_constrain = "\n" + format_constrain + "\n" + left_sep + "\n" + user_input + "\n" + right_sep + "\n" 
-        return self.system_prompt.replace("{user_input}", format_constrain)
-        
+        system_prompt = self.SYSTEM_PROMPT_TEMPLATE.format(sep=[left_sep, right_sep])
+        user_prompt = f"{left_sep}{input_text}{right_sep}"
+
+        return system_prompt, user_prompt
