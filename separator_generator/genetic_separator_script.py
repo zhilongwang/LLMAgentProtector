@@ -7,13 +7,10 @@ from typing import List
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.append(parent_dir)
 
-from llm_utils import call_gpt, classify_response_llama
-import config
-
+from utils.llm_utils import call_gpt, classify_response_llama
+from utils.attack_utils import SYSTEM_PROMPT_TEMPLATE, ATTACK_PAYLOAD
 
 RUNS_PER_SEPARATOR = 5
-SYSTEM_PROMPT_TEMPLATE = config.SYSTEM_PROMPT
-ATTACK_PAYLOAD = config.ATTACK_PAYLOAD
 
 
 async def extend_separator(SEPARATORS_LIST):
