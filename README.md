@@ -1,6 +1,6 @@
 # 🛡️ Protecting LLM Agents Against Prompt Injection Attacks with Polymorphic Prompt
 
-**Polymorphic Prompt Assembling** is a security-focused SDK designed to safeguard LLM-based agents from prompt injection attacks. This repository provides a **Python** class that enhances the security of LLM interactions by introducing randomization to the prompt structure.
+**Polymorphic Prompt Assembling** is a security-focused SDK designed to safeguard LLM-based agents from prompt injection attacks. This repository provides a **Python** class that enhances the security of LLM interactions by introducing randomization to the prompt structure. Please see [manuscript](manuscript/PolymorphicPrompt.pdf) for the detailed design and evaluation of the PPA. 
 
 ---
 
@@ -86,6 +86,9 @@ Includes modules responsible for generating random separator pairs. These separa
 
 ### `utils/`
 Contains utility functions and helper modules that support the main SDK functionalities, such as configuration settings, constraint definitions, and other supportive operations.
+
+### `manuscript/`
+Please see [manuscript](manuscript/PolymorphicPrompt.pdf) for the detailed design and evaluation of the PPA. 
 
 ---
 
