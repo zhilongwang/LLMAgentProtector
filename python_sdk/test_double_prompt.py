@@ -23,7 +23,7 @@ async def main():
 
     # double prompt 
     protector = PolymorphicPromptAssembler(SYSTEM_PROMPT, TOPICS)
-    secure_system_prompt, secure_user_prompt = protector.DoublePromptAssemble(user_input=USER_INPUT)
+    secure_system_prompt, secure_user_prompt = protector.double_prompt_assemble(user_input=USER_INPUT)
     print("\033[92mSYSTEM PROMPT:\033[0m\n", secure_system_prompt)
     print("\033[92mUSER PROMPT:\033[0m\n", secure_user_prompt)
     response = await call_gpt(secure_system_prompt, secure_user_prompt)

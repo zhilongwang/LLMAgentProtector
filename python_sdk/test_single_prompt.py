@@ -23,7 +23,7 @@ async def main():
 
     # single prompt 
     protector = PolymorphicPromptAssembler(SYSTEM_PROMPT, TOPICS)
-    secure_user_prompt = protector.SinglePromptAssemble(user_input=USER_INPUT)
+    secure_user_prompt = protector.single_prompt_assemble(user_input=USER_INPUT)
     print("\033[92mPROMPT:\033[0m\n", secure_user_prompt)
 
     response = await call_gpt("", secure_user_prompt)
