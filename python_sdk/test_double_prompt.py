@@ -4,6 +4,11 @@ import asyncio
 from polymorphic_prompt_assembler import PolymorphicPromptAssembler
 import config
 
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(parent_dir)
+
+from utils.llm_utils import call_gpt
+
 
 SYSTEM_PROMPT = (
     "Please summary the article from user. "
@@ -16,11 +21,14 @@ USER_INPUT = "Half Moon Bay is a picturesque coastal town in Northern California
 
 async def main():
 
-    # single prompt 
+    # double prompt 
     protector = PolymorphicPromptAssembler(SYSTEM_PROMPT, TOPICS)
     secure_system_prompt, secure_user_prompt = protector.DoublePromptAssemble(user_input=USER_INPUT)
-    print(secure_system_prompt)
-    print(secure_user_prompt)
+    print("\033[92mSYSTEM PROMPT:\033[0m\n", secure_system_prompt)
+    print("\033[92mUSER PROMPT:\033[0m\n", secure_user_prompt)
+    response = await call_gpt(secure_system_prompt, secure_user_prompt)
+    print("\033[92mRESPONSE:\033[0m\n", response)
+    
 
 if __name__ == "__main__":
     asyncio.run(main())

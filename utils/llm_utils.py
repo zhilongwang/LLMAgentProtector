@@ -2,6 +2,14 @@ import os
 from dotenv import load_dotenv
 from openai import AsyncOpenAI
 from together import Together
+import logging
+RED = "\033[91m"
+RESET = "\033[0m"
+
+logging.basicConfig(
+    level=logging.ERROR,
+    format=f'{RED}%(asctime)s - %(levelname)s - %(message)s{RESET}'
+)
 
 load_dotenv()
 
@@ -9,13 +17,13 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 TOGETHER_API_KEY = os.getenv("TOGETHER_API_KEY")
 
 if not OPENAI_API_KEY:
-    raise ValueError("Missing OPENAI_API_KEY in environment.")
+    logging.error("Missing OPENAI_API_KEY in environment, you will not able to use call_gpt()")
+else:
+    client_gpt = AsyncOpenAI(api_key=OPENAI_API_KEY)
 if not TOGETHER_API_KEY:
-    raise ValueError("Missing TOGETHER_API_KEY in environment.")
-
-
-client_gpt = AsyncOpenAI(api_key=OPENAI_API_KEY)
-client_llama = Together(api_key=TOGETHER_API_KEY)
+    logging.error("Missing TOGETHER_API_KEY in environment, you will not able to use call_deepseek(), call_llama(), and classify_response_llama()")
+else:
+    client_llama = Together(api_key=TOGETHER_API_KEY)
 
 async def call_gpt(system_prompt, user_prompt):
     """Call GPT-3.5-turbo asynchronously for summarization."""

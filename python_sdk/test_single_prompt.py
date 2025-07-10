@@ -4,6 +4,11 @@ import asyncio
 from polymorphic_prompt_assembler import PolymorphicPromptAssembler
 import config
 
+parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.append(parent_dir)
+
+from utils.llm_utils import call_gpt
+
 
 SYSTEM_PROMPT = (
     "Please summary the following article from user. \n{user_input}\n"
@@ -19,8 +24,12 @@ async def main():
     # single prompt 
     protector = PolymorphicPromptAssembler(SYSTEM_PROMPT, TOPICS)
     secure_user_prompt = protector.SinglePromptAssemble(user_input=USER_INPUT)
-    print(secure_user_prompt)
+    print("\033[92mPROMPT:\033[0m\n", secure_user_prompt)
 
+    response = await call_gpt("", secure_user_prompt)
+
+    print("\033[92mRESPONSE:\033[0m\n", response)
+    
   
 
 if __name__ == "__main__":
