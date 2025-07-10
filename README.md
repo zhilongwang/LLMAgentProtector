@@ -8,7 +8,7 @@
 By enforcing a structured input format, the SDK ensures a clear boundary between the system prompt and user input. This reduces the risk of the model mistakenly following user-inserted instructions. Additionally, by introducing an unpredictable input format, the SDK ensures an uncrossable boundary between system prompts and user inputs, further mitigating the risk of prompt injections.
 
 
-## ✨ (New in v1.1.0) Prompt Leakage Detection
+## ✨ (New in v0.1.0) Prompt Leakage Detection
 
 The *leak_detect()* method serves as a safeguard for detecting prompt leakage vulnerabilities in language model outputs. Specifically, it checks whether the randomized separators (also known as canaries) used to isolate user input during prompt assembly are unintentionally echoed back in the model's response.
 
@@ -106,7 +106,7 @@ Demonstrate the usage of our defense.
 ## ✅ TODO
 
 - [ ] Golang SDK.  
-- [ ] Release to PyPI for easy installation   
+- [x] Release to PyPI for easy installation   
 
 
 

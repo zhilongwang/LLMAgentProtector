@@ -3,7 +3,7 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [v1.1.0] - 2025-07-09
+## [v0.1.0] - 2025-07-09
 
 ### ✨ New Features
 - **🔐 Prompt Leakage Detection**: Added `leak_detect()` method to identify if polymorphic separators leak into the LLM's output.
@@ -14,7 +14,7 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [v1.0.0] - 2025-06-01
+## [v0.0.0] - 2025-06-01
 
 ### 🚀 Initial Release
 - Core implementation of the `PolymorphicPromptAssembler` class.
