@@ -10,7 +10,7 @@ By enforcing a structured input format, the SDK ensures a clear boundary between
 
 ---
 
-## ✨ (New in v0.0.2) Prompt Leakage Detection
+## ✨ (New in v1.1.0) Prompt Leakage Detection
 
 The *leak_detect()* method serves as a safeguard for detecting prompt leakage vulnerabilities in language model outputs. Specifically, it checks whether the randomized separators (also known as canaries) used to isolate user input during prompt assembly are unintentionally echoed back in the model's response.
 

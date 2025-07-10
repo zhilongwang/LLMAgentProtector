@@ -1,0 +1,11 @@
+[project]
+name = "llm-agent-protector"
+version = "0.1.0"
+description = "A tool to protect LLM agents from prompt injection and prompt leak"
+authors = [{ name="Zhilong Wang", email="izhilongwang@gmail.com" }]
+readme = "README.md"
+dependencies = []
+
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
