@@ -17,4 +17,4 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-packages = ["llm_agent_protector"]
+packages = ["llmagentprotector"]

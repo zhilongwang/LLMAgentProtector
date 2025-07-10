@@ -3,7 +3,7 @@ This project follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [v1.2.0] - 2025-07-09
+## [v1.1.0] - 2025-07-09
 
 ### ✨ New Features
 - **🔐 Prompt Leakage Detection**: Added `leak_detect()` method to identify if polymorphic separators leak into the LLM's output.
