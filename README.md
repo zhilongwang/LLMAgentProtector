@@ -86,20 +86,20 @@ if prompt_leaked:
 
 The `LLMAgentProtector` repository is organized into several key directories, each serving a specific purpose in enhancing the security of LLM-based agents against prompt injection attacks:
 
-### `examples/`
-Contains demonstration scripts and usage examples illustrating how to integrate and utilize the Polymorphic Prompt Assembling (PPA) techniques provided by the SDK.
+### `attack_tests/`
+Contains demonstration scripts to show the effectiveness of our defense.
 
-### `python_sdk/`
+### `llmagentprotector/`
 Houses the core Python SDK implementation of the Polymorphic Prompt Assembler, including classes and methods that introduce randomized prompt structures to mitigate prompt injection vulnerabilities.
 
 ### `separator_generator/`
 Includes modules responsible for generating random separator pairs. These separators are used to encapsulate user inputs, creating unpredictable boundaries that enhance security.
 
 ### `utils/`
-Contains utility functions and helper modules that support the main SDK functionalities, such as configuration settings, constraint definitions, and other supportive operations.
+Contains utility functions and helper modules for testing.
 
-### `manuscript/`
-Please see [manuscript](manuscript/PolymorphicPrompt.pdf) for the detailed design and evaluation of the PPA. 
+### `tests/`
+Demonstrate the usage of our defense.
 
 
 
