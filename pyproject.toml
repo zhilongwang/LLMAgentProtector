@@ -1,11 +1,20 @@
 [project]
 name = "llm-agent-protector"
 version = "0.1.0"
-description = "A tool to protect LLM agents from prompt injection and prompt leak"
-authors = [{ name="Zhilong Wang", email="izhilongwang@gmail.com" }]
+description = "Polymorphic Prompt Assembler to protect LLM agents from prompt injection and prompt leak"
 readme = "README.md"
+authors = [{ name="Zhilong Wang", email="izhilongwang@gmail.com" }]
+license = "MIT"
+keywords = ["llm", "prompt injection", "agent", "security", "openai", "protection"]
 dependencies = []
+
+[project.urls]
+"Homepage" = "https://github.com/zhilongwang/LLMAgentProtector"
+"Repository" = "https://github.com/zhilongwang/LLMAgentProtector"
 
 [build-system]
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["llm_agent_protector"]
