@@ -16,7 +16,9 @@ class PolymorphicPromptAssembler:
 
     In single_prompt_assemble, the single assembled prompt contains both the constraints and user input.
 
-    This technique mitigates prompt injection by making system-to-user transitions opaque to attackers.
+    The leak_detect detect the prompt leakage by check if the separator appears in the model response.
+
+    This technique mitigates prompt injection by inserting polymorphic boundary between instruction and user input. 
 
     Example:
         >>> from polymorphic_prompt_assembler import PolymorphicPromptAssembler
@@ -25,6 +27,8 @@ class PolymorphicPromptAssembler:
         >>> system_prompt, user_prompt = protector.PromptAssemble(user_input=user_input)
         >>> print(system_prompt)
         >>> print(user_prompt)
+        >>> response = await call_gpt(system_prompt, user_prompt)
+        >>> prompt_leaked = protector.leak_detect(response, canary)
     """
 
     def __init__(self, system_prompt:str=None, task_topic:str=None):
@@ -44,12 +48,13 @@ class PolymorphicPromptAssembler:
         Returns:
             tuple: (user_prompt)
                 - secure_prompt (str): User input wrapped inside the random separators.
+                - canary ((left_sep, right_sep)): Canary are left_sep and right_sep that are embedded into model input and used to detect the prompt leakage.
         """
 
         left_sep, right_sep = random.choice(self.SEPARATORS)
         format_constrain = self.FORMAT_CONSTRAIN.format(left_sep=left_sep, right_sep=right_sep)
         format_constrain = "\n" + format_constrain + "\n\n" + left_sep + "\n" + user_input + "\n" + right_sep + "\n" 
-        return self.secure_system_prompt.replace("{user_input}", format_constrain)
+        return self.secure_system_prompt.replace("{user_input}", format_constrain), (left_sep, right_sep)
 
 
     def double_prompt_assemble(self, user_input: str = None):
@@ -57,7 +62,6 @@ class PolymorphicPromptAssembler:
         
         This method assemble two protected prompts (secure_system_prompt, secure_user_prompt) by inserting the user input between randomly chosen separators. This two prompts serve for the case developer want to pass both system prompt and user prompts to LLM when developping agent.   
         
-
         Args:
             user_input (str): The user's raw input text.
 
@@ -65,10 +69,28 @@ class PolymorphicPromptAssembler:
             tuple: (secure_system_prompt, secure_user_prompt)
                 - secure_system_prompt (str): Describes the input boundaries and instructs the LLM.
                 - secure_user_prompt (str): User input wrapped inside the random separators.
+                - canary ((left_sep, right_sep)): Canary are left_sep and right_sep that are embedded into model input and used to detect the prompt leakage.
         """
 
         left_sep, right_sep = random.choice(self.SEPARATORS)
         self.secure_system_prompt 
         self.secure_user_prompt = self.FORMAT_CONSTRAIN.format(left_sep=left_sep, right_sep=right_sep) +  "\n\n" + left_sep + "\n" + user_input + "\n" + right_sep + "\n"
-        return self.secure_system_prompt, self.secure_user_prompt 
+        return self.secure_system_prompt, self.secure_user_prompt, (left_sep, right_sep)
     
+
+    """
+        
+        This method detect the prompt leakage by check if the separator appears in the model response.
+
+        Args:
+            response (str): the LLM output.
+            tuple: (left_sep, right_sep): Canary is used to detect the prompt leakage.
+        Returns:
+            detected (bool): whether prompt leakage is detected.
+        """
+    def leak_detect(self, response, canary):
+        left_sep, right_sep = canary
+        if left_sep in response or right_sep in response:
+            return True
+        return False
+

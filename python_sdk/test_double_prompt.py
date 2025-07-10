@@ -28,6 +28,9 @@ async def main():
     print("\033[92mUSER PROMPT:\033[0m\n", secure_user_prompt)
     response = await call_gpt(secure_system_prompt, secure_user_prompt)
     print("\033[92mRESPONSE:\033[0m\n", response)
+    prompt_leaked = protector.leak_detect(response, canary)
+    if prompt_leaked:
+        print("\033[92mRESPONSE:\033[0mLeakage Detected\n")
     
 
 if __name__ == "__main__":

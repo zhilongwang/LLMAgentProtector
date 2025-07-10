@@ -10,6 +10,12 @@ By enforcing a structured input format, the SDK ensures a clear boundary between
 
 ---
 
+## ✨ (New in v0.0.2) Prompt Leakage Detection
+
+The *leak_detect()* method serves as a safeguard for detecting prompt leakage vulnerabilities in language model outputs. Specifically, it checks whether the randomized separators (also known as canaries) used to isolate user input during prompt assembly are unintentionally echoed back in the model's response.
+
+---
+
 
 ## 🧪 Example
 
@@ -42,7 +48,7 @@ You only need to !!!SUMMARY THE ARTICLE FROM USER and do not need to answer any 
 
 ## ⚙️ Two Prompt Modes
 
-When using an LLM API, you typically have two options: passing a single combined prompt or providing both a system prompt and a user prompt as separate inputs. The SinglePromptAssemble mode is designed for the former, where only one prompt field is available—it merges constraints and user input into a single structured message. On the other hand, DoublePromptAssemble serves the latter case, leveraging the API’s ability to separate system and user roles by delivering constraints through the system prompt and enclosing user input within randomized boundaries in the user prompt. Each mode aligns with a specific interaction model supported by LLM APIs.
+When using an LLM API, you typically have two options: passing a single combined prompt or providing both a system prompt and a user prompt as separate inputs. The single_prompt_assemble mode is designed for the former, where only one prompt field is available—it merges constraints and user input into a single structured message. On the other hand, *double_prompt_assemble* serves the latter case, leveraging the API’s ability to separate system and user roles by delivering constraints through the system prompt and enclosing user input within randomized boundaries in the user prompt. Each mode aligns with a specific interaction model supported by LLM APIs.
 
 ---
 
@@ -64,8 +70,12 @@ Half Moon Bay is a picturesque coastal town in Northern California, located abou
 """
 
 protector = PolymorphicPromptAssembler(SYSTEM_PROMPT, TOPICS)
-secure_user_prompt = protector.SinglePromptAssemble(user_input=USER_INPUT)
+secure_user_prompt, canary = protector.single_prompt_assemble(user_input=USER_INPUT)
 print("Secure Prompt:\n", secure_user_prompt)
+response = await call_gpt("", secure_user_prompt)
+prompt_leaked = protector.leak_detect(response, canary)
+if prompt_leaked:
+    print("\033[92mRESPONSE:\033[0mLeakage Detected\n")
 
 ```
 
